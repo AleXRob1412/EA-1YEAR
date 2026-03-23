@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>E&A SYSTEM</title>
+
+<style>
+body {
+    background: #020202;
+    color: #00ffcc;
+    font-family: monospace;
+    padding: 20px;
+}
+
+#terminal {
+    white-space: pre-wrap;
+}
+
+input {
+    width: 100%;
+    background: black;
+    border: none;
+    color: #00ffcc;
+    font-family: monospace;
+    outline: none;
+}
+
+#progress {
+    height: 10px;
+    background: #111;
+    margin-top: 10px;
+}
+
+#bar {
+    height: 10px;
+    width: 0%;
+    background: #00ffcc;
+}
+
+.glitch {
+    animation: glitch 1s infinite;
+}
+
+@keyframes glitch {
+    0% {opacity:1;}
+    50% {opacity:0.3;}
+    100% {opacity:1;}
+}
+</style>
+</head>
+
+<body>
+
+<h2 class="glitch">E&A SYSTEM v1.0</h2>
+
+<div id="terminal"></div>
+<input id="cmd" autofocus placeholder="Escribe un comando...">
+
+<div id="progress"><div id="bar"></div></div>
+
+<script>
+
+const term = document.getElementById("terminal");
+const input = document.getElementById("cmd");
+
+let level = 0;
+
+const answers = [
+"19.3140264,-99.0758641",
+"12.23",
+"shito",
+"sagitario",
+"gym",
+"vino",
+"when all i want",
+"as if it's your last",
+"343.2",
+"atena",
+"hattori",
+"2686"
+];
+
+const questions = [
+"Nivel 1 → Coordenadas del origen",
+"Nivel 2 → Distancia en línea recta",
+"Nivel 3 → Estilo de karate",
+"Nivel 4 → Agujero negro",
+"Nivel 5 → Donde entrenamos",
+"Nivel 6 → Recuerdo con Alex",
+"Nivel 7 → Letra especial",
+"Nivel 8 → Canción KPOP",
+"Nivel 9 → Pilar del sonido",
+"Nivel 10 → Mascota",
+"Nivel 11 → Guerrero legendario",
+"Nivel 12 → Código final"
+];
+
+function print(text){
+    term.innerHTML += text + "\n";
+    term.scrollTop = term.scrollHeight;
+}
+
+function progress(){
+    document.getElementById("bar").style.width = (level/12*100)+"%";
+}
+
+function start(){
+    print("Inicializando sistema...");
+    print("Cargando memoria...");
+    print("Usuario detectado: EDUARDO\n");
+    print("Escribe 'help' para comenzar.\n");
+}
+
+input.addEventListener("keydown", function(e){
+    if(e.key === "Enter"){
+        const cmd = input.value.toLowerCase();
+        print("> " + cmd);
+
+        if(cmd === "help"){
+            print("Comandos disponibles:");
+            print("start → iniciar misión");
+            print("unlock → responder nivel");
+            print("scan → pista");
+        }
+
+        else if(cmd === "start"){
+            print("MISIÓN INICIADA...\n");
+            print(questions[level]);
+        }
+
+        else if(cmd === "scan"){
+            print("Buscando pistas...");
+            print("Analiza tu entorno y recuerdos.\n");
+        }
+
+        else if(cmd.startsWith("unlock")){
+            let user = cmd.replace("unlock ","");
+
+            if(user.includes(answers[level])){
+                print("✔ ACCESS GRANTED\n");
+                level++;
+                progress();
+
+                if(level === 12){
+                    final();
+                } else {
+                    print("Nivel desbloqueado...\n");
+                    print(questions[level]);
+                }
+
+            } else {
+                print("✖ ACCESS DENIED\n");
+            }
+        }
+
+        input.value="";
+    }
+});
+
+function final(){
+    print("🔐 SISTEMA FINAL DESBLOQUEADO...");
+    print("Abriendo núcleo...\n");
+
+    setTimeout(()=>{
+        print("🎉 MISIÓN COMPLETADA 🎉\n");
+        print("Has completado el Nivel 1 de nuestra historia...\n");
+        print("Si llegaste hasta aquí...");
+        print("Es porque eres parte de mi universo.\n");
+        print("Te amo. — Alejandro ❤️");
+    },2000);
+}
+
+start();
+
+</script>
+
+</body>
+</html>
