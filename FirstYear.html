@@ -90,10 +90,10 @@ const questions = [
 "Nivel 6 → Quiero compartir contigo un Bello recuerdo, Este día me la pase de maravilla, nos divertimos mucho, Gracias por hacerme reir, tu mejor amigo puede que te ayude con esto.",
 "Nivel 7 → Hace falta poner atencion a lo que cante Alex",
 "Nivel 8 → El segundo 17 de esta cancion me facino, gracias por enseñarme.",
-"Nivel 9 → sonido ",
-"Nivel 10 → Mascota",
-"Nivel 11 → Guerrero legendario",
-"Nivel 12 → Código final"
+"Nivel 9 → El pilar mas Guapo tiene una habilidad que se mueve rapido. ",
+"Nivel 10 → De tus videojuegos fav y tus personajes fav",
+"Nivel 11 → Las peliculas de Samurai son de mis favoritas y en estas es un famoso forjador de armas sin comparacion.",
+"Nivel 12 → Tus dos amigos te entregaron el punto inicial y el final."
 ];
 
 function print(text){
@@ -121,17 +121,12 @@ input.addEventListener("keydown", function(e){
             print("Comandos disponibles:");
             print("start → iniciar misión");
             print("unlock → responder nivel");
-            print("scan → pista");
+        
         }
 
         else if(cmd === "start"){
             print("MISIÓN INICIADA...\n");
             print(questions[level]);
-        }
-
-        else if(cmd === "scan"){
-            print("Buscando pistas...");
-            print("Analiza tu entorno y recuerdos.\n");
         }
 
         else if(cmd.startsWith("unlock")){
