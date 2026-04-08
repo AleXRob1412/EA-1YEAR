@@ -2,81 +2,60 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>E&A ANNIVERSARY</title>
+<title>E&A SYSTEM LEGEND</title>
 
 <style>
-body {
-    margin:0;
-    background:black;
-    color:#00ffcc;
-    font-family:monospace;
-    overflow:hidden;
+body{
+margin:0;
+background:black;
+color:#00ffcc;
+font-family:monospace;
+overflow:hidden;
 }
 
-canvas {
-    position:fixed;
-    top:0;
-    left:0;
-    z-index:-1;
+canvas{
+position:fixed;
+top:0;
+left:0;
+z-index:-1;
 }
 
-#container {
-    padding:20px;
+#container{padding:20px;}
+
+#terminal{
+height:70vh;
+overflow-y:auto;
+white-space:pre-wrap;
 }
 
-#terminal {
-    height:70vh;
-    overflow-y:auto;
-    white-space:pre-wrap;
+input{
+width:100%;
+background:black;
+border:none;
+color:#00ffcc;
+outline:none;
 }
 
-input {
-    width:100%;
-    background:black;
-    border:none;
-    color:#00ffcc;
-    font-family:monospace;
-    outline:none;
+#progress{height:5px;background:#111;}
+#bar{height:5px;width:0%;background:#00ffcc;transition:.5s;}
+
+#finalScreen{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:black;
+display:none;
+justify-content:center;
+align-items:center;
+text-align:center;
 }
 
-#progress {
-    height:6px;
-    background:#111;
-}
-
-#bar {
-    height:6px;
-    width:0%;
-    background:#00ffcc;
-    transition:0.5s;
-}
-
-#finalScreen {
-    position:fixed;
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
-    background:black;
-    display:none;
-    justify-content:center;
-    align-items:center;
-    text-align:center;
-    animation: fadeIn 2s;
-}
-
-@keyframes fadeIn {
-    from {opacity:0;}
-    to {opacity:1;}
-}
-
-.glow {
-    animation: glow 1.5s infinite alternate;
-}
-
-@keyframes glow {
-    from {text-shadow:0 0 5px #00ffcc;}
-    to {text-shadow:0 0 20px #00ffcc;}
+.glow{animation:glow 1.5s infinite alternate;}
+@keyframes glow{
+from{text-shadow:0 0 5px #0ff;}
+to{text-shadow:0 0 20px #0ff;}
 }
 </style>
 </head>
@@ -103,21 +82,16 @@ input {
 
 <script>
 
-// MATRIX EFFECT
+// MATRIX
 const canvas = document.getElementById("matrix");
 const ctx = canvas.getContext("2d");
 canvas.height = window.innerHeight;
 canvas.width = window.innerWidth;
 
-let letters = "01";
-letters = letters.split("");
-
+let letters = "01".split("");
 let fontSize = 14;
-let columns = canvas.width / fontSize;
-let drops = [];
-
-for(let x=0; x<columns; x++)
-drops[x]=1;
+let columns = canvas.width/fontSize;
+let drops = Array(columns).fill(1);
 
 function draw(){
 ctx.fillStyle="rgba(0,0,0,0.05)";
@@ -130,90 +104,104 @@ for(let i=0;i<drops.length;i++){
 let text = letters[Math.floor(Math.random()*letters.length)];
 ctx.fillText(text,i*fontSize,drops[i]*fontSize);
 
-if(drops[i]*fontSize > canvas.height && Math.random()>0.975)
+if(drops[i]*fontSize>canvas.height && Math.random()>0.975)
 drops[i]=0;
 
 drops[i]++;
 }
 }
-
 setInterval(draw,33);
 
 // TERMINAL
-const term = document.getElementById("terminal");
-const input = document.getElementById("cmd");
+const term=document.getElementById("terminal");
+const input=document.getElementById("cmd");
 
-let level = localStorage.getItem("ea_level") ? parseInt(localStorage.getItem("ea_level")) : 0;
+let level=localStorage.getItem("ea_level")?parseInt(localStorage.getItem("ea_level")):0;
 
-const fragments = [
-["19.31","40264","-99.07","58641"],
-["12","23"],
-["shito","ryu"],
-["sagitario","a"],
-["gym"],
-["vino"],
-["whenalliwant","foryoutosee"],
-["asif","itsyourlast"],
-["343","2"],
-["atena"],
-["hattori","hanzo"],
-["2686"]
+// 🔐 CLAVE FRAGMENTADA
+const k=["E&A","🔥","2026"];
+const KEY=k.join("");
+
+// 🔐 RESPUESTAS CIFRADAS (DEBES GENERARLAS)
+const encrypted=[
+"U2FsdGVkX19Ejemplo1...",
+"U2FsdGVkX19Ejemplo2...",
+"U2FsdGVkX19Ejemplo3...",
+"U2FsdGVkX19Ejemplo4...",
+"U2FsdGVkX19Ejemplo5...",
+"U2FsdGVkX19Ejemplo6...",
+"U2FsdGVkX19Ejemplo7...",
+"U2FsdGVkX19Ejemplo8...",
+"U2FsdGVkX19Ejemplo9...",
+"U2FsdGVkX19Ejemplo10...",
+"U2FsdGVkX19Ejemplo11...",
+"U2FsdGVkX19Ejemplo12..."
 ];
 
-const logic = [
-(v)=>v.includes("19") && v.includes("99"),
-(v)=>v.includes("12"),
-(v)=>v.includes("shito"),
-(v)=>v.includes("sagitario"),
-(v)=>v.includes("gym"),
-(v)=>v.includes("vino"),
-(v)=>v.includes("when"),
-(v)=>v.includes("asif"),
-(v)=>v.includes("343"),
-(v)=>v.includes("atena"),
-(v)=>v.includes("hattori"),
-(v)=>v.includes("2686")
-];
-
-const questions = [
-"Nivel 1 → Los lugares suelen ser especiales, más donde todo comienza",
-"Nivel 2 → Por las noches suelo medir la distacia que hay entre nosotros.",
-"Nivel 3 → ¿conoces a Kenwa Mabuni?",
-"Nivel 4 → Se encuentra en el centro, es supermasivo y miles de estrellas giran a su alrededor incluyendo la nuestra.",
-"Nivel 5 → Es nuestro lugar fav aunque a veces no vayamos",
-"Nivel 6 → Quiero compartir contigo un Bello recuerdo...",
-"Nivel 7 → Hace falta poner atencion a lo que cante Alex",
-"Nivel 8 → El segundo 17 de esta cancion me facino...",
-"Nivel 9 → El pilar mas Guapo tiene una respiración que se mueve rapido.",
-"Nivel 10 → Hablemos de Videojuegos con Jauregui",
-"Nivel 11 → Samurai legendario...",
-"Nivel 12 → Los dias se contaron desde el inicio..."
-];
-
-function normalize(t){
-return t.toLowerCase().replace(/[^a-z0-9]/g,"");
+// NORMALIZAR
+function N(t){
+return t.toLowerCase()
+.normalize("NFD")
+.replace(/[\u0300-\u036f]/g,"")
+.replace(/[^a-z0-9]/g,"");
 }
 
-function buildAnswer(i){
-return fragments[i].join("");
+// DESCIFRAR
+function D(e){
+try{
+return CryptoJS.AES.decrypt(e,KEY).toString(CryptoJS.enc.Utf8);
+}catch{return "";}
 }
 
+// HASH
+function H(v){
+return CryptoJS.SHA256(v+KEY).toString();
+}
+
+// VALIDACIÓN
+function validate(input,level){
+let user=N(input);
+let real=N(D(encrypted[level]));
+if(!real)return false;
+return H(user)===H(real);
+}
+
+// PRINT
 function print(t){
-term.innerHTML += t + "\n";
-term.scrollTop = term.scrollHeight;
+term.innerHTML+=t+"\n";
+term.scrollTop=term.scrollHeight;
 }
 
+// PROGRESO
 function progress(){
-document.getElementById("bar").style.width = (level/12*100)+"%";
+document.getElementById("bar").style.width=(level/12*100)+"%";
 }
 
-input.addEventListener("keydown", function(e){
+// ANTI DEBUG
+setInterval(()=>{
+const t=performance.now();
+debugger;
+if(performance.now()-t>100){
+document.body.innerHTML="Sistema bloqueado.";
+}
+},3000);
+
+// DEVTOOLS DETECTOR
+setInterval(()=>{
+if(window.outerWidth-window.innerWidth>100){
+console.clear();
+console.log("👀 curioso...");
+}
+},1000);
+
+// COMANDOS
+input.addEventListener("keydown",function(e){
 if(e.key==="Enter"){
 
-let raw = input.value;
-let cmd = raw.toLowerCase();
+let raw=input.value;
+let cmd=raw.toLowerCase();
 
-print("> " + raw);
+print("> "+raw);
 
 if(cmd==="start"){
 print(questions[level]);
@@ -221,12 +209,9 @@ print(questions[level]);
 
 else if(cmd.startsWith("unlock")){
 
-let user = normalize(raw.replace("unlock ",""));
-let real = normalize(buildAnswer(level));
-
 setTimeout(()=>{
 
-if(user === real || logic[level](user)){
+if(validate(raw.replace("unlock ",""),level)){
 print("✔ ACCESS GRANTED\n");
 level++;
 localStorage.setItem("ea_level",level);
@@ -242,7 +227,7 @@ print(questions[level]);
 print("✖ ACCESS DENIED\n");
 }
 
-},800);
+},700);
 
 }
 
@@ -250,11 +235,27 @@ input.value="";
 }
 });
 
-function final(){
+// PREGUNTAS (TUS ORIGINALES)
+const questions=[
+"Nivel 1 → Los lugares suelen ser especiales, más donde todo comienza",
+"Nivel 2 → Por las noches suelo medir la distacia que hay entre nosotros.",
+"Nivel 3 → ¿conoces a Kenwa Mabuni?",
+"Nivel 4 → Se encuentra en el centro, es supermasivo y miles de estrellas giran a su alrededor incluyendo la nuestra.",
+"Nivel 5 → Es nuestro lugar fav aunque a veces no vayamos",
+"Nivel 6 → Quiero compartir contigo un Bello recuerdo...",
+"Nivel 7 → Hace falta poner atencion a lo que cante Alex",
+"Nivel 8 → El segundo 17 de esta cancion me facino...",
+"Nivel 9 → El pilar mas Guapo tiene una respiración que se mueve rapido.",
+"Nivel 10 → Hablemos de Videojuegos con Jauregui",
+"Nivel 11 → Samurai legendario...",
+"Nivel 12 → Los dias se contaron desde el inicio..."
+];
 
+// FINAL
+function final(){
 document.getElementById("finalScreen").style.display="flex";
 
-let text = [
+let text=[
 "No fue suerte...",
 "Fue destino...",
 "Fue decisión...",
@@ -267,22 +268,23 @@ let text = [
 ];
 
 let i=0;
-
 function show(){
 if(i<text.length){
-document.getElementById("finalText").innerHTML += text[i] + "<br>";
+document.getElementById("finalText").innerHTML+=text[i]+"<br>";
 i++;
 setTimeout(show,1500);
 }
 }
-
 show();
 }
 
+// INIT
 print("Sistema iniciado...");
 print("Escribe 'start'");
-
 progress();
+
+// Easter egg
+console.log("No todo sistema se rompe… algunos se viven ❤️");
 
 </script>
 
