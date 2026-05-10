@@ -1,370 +1,174 @@
+
 <!DOCTYPE html>
-
 <html lang="es">
-
 <head>
-
 <meta charset="UTF-8">
-
-<title>E&A ANIVERSARY</title>
+<title>E&A ANNIVERSARY</title>
 
 <style>
-
-body{
-
-margin:0;
-
-background:black;
-
-color:#00ffcc;
-
-font-family:monospace;
-
-overflow:hidden;
-
+body {
+    background: #020202;
+    color: #00ffcc;
+    font-family: monospace;
+    padding: 20px;
 }
 
-canvas{
-
-position:fixed;
-
-top:0;
-
-left:0;
-
-z-index:-1;
-
+#terminal {
+    white-space: pre-wrap;
 }
 
-#container{padding:20px;}
-
-#terminal{
-
-height:70vh;
-
-overflow-y:auto;
-
-white-space:pre-wrap;
-
+input {
+    width: 100%;
+    background: black;
+    border: none;
+    color: #00ffcc;
+    font-family: monospace;
+    outline: none;
 }
 
-input{
-
-width:100%;
-
-background:black;
-
-border:none;
-
-color:#00ffcc;
-
-outline:none;
-
+#progress {
+    height: 10px;
+    background: #111;
+    margin-top: 10px;
 }
 
-#progress{height:5px;background:#111;}
-
-#bar{height:5px;width:0%;background:#00ffcc;transition:.5s;}
-
-#finalScreen{
-
-position:fixed;
-
-top:0;
-
-left:0;
-
-width:100%;
-
-height:100%;
-
-background:black;
-
-display:none;
-
-justify-content:center;
-
-align-items:center;
-
-text-align:center;
-
+#bar {
+    height: 10px;
+    width: 0%;
+    background: #00ffcc;
 }
 
-.glow{animation:glow 1.5s infinite alternate;}
-
-@keyframes glow{
-
-from{text-shadow:0 0 5px #0ff;}
-
-to{text-shadow:0 0 20px #0ff;}
-
+.glitch {
+    animation: glitch 1s infinite;
 }
 
+@keyframes glitch {
+    0% {opacity:1;}
+    50% {opacity:0.3;}
+    100% {opacity:1;}
+}
 </style>
-
 </head>
 
 <body>
 
-<canvas id="matrix"></canvas>
-
-<div id="container">
-
-<h2 class="glow">E&A SYSTEM</h2>
+<h2 class="glitch">E&A FIRST ANNIVERSAY v1.0</h2>
 
 <div id="terminal"></div>
-
-<input id="cmd" placeholder="Escribe un comando...">
+<input id="cmd" autofocus placeholder="Escribe un comando...">
 
 <div id="progress"><div id="bar"></div></div>
 
-</div>
-
-<div id="finalScreen">
-
-<div>
-
-<h1 class="glow">MISIÓN COMPLETADA</h1>
-
-<p id="finalText"></p>
-
-</div>
-
-</div>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
-
 <script>
 
+const term = document.getElementById("terminal");
+const input = document.getElementById("cmd");
+
+let level = 0;
+
+const answers = [
+"19.3140264,-99.0758641",
+"12.23",
+"shito-ryu",
+"sagitario a",
+"gym",
+"vino",
+"when all i want is for you to see, the side that i don’t show to anyone",
+"as if it's your last",
+"343.2",
+"Atena",
+"Hattori Hanzo",
+"2686"
+];
 
 const questions = [
-
 "Nivel 1 → Los lugares suelen ser especiales, más donde todo comienza",
-
 "Nivel 2 → Por las noches suelo medir la distacia que hay entre nosotros.",
-
 "Nivel 3 → ¿conoces a Kenwa Mabuni?",
-
-"Nivel 4 → Se encuentra en el centro, es supermasivo y miles de estrellas giran a su alrededor incluyendo la nuestra.",
-
+"Nivel 4 → Se encuentra en el centro, es supermasivo y miles de estrellas giran a su alrededor incluyendo la nuestra. ",
 "Nivel 5 → Es nuestro lugar fav aunque a veces no vayamos",
-
-"Nivel 6 → Quiero compartir contigo un Bello recuerdo...",
-
+"Nivel 6 → Quiero compartir contigo un Bello recuerdo, Este día me la pase de maravilla, nos divertimos mucho, Gracias por hacerme reir, tu mejor amigo puede que te ayude con esto.",
 "Nivel 7 → Hace falta poner atencion a lo que cante Alex",
-
-"Nivel 8 → El segundo 17 de esta cancion me facino...",
-
-"Nivel 9 → El pilar mas Guapo tiene una respiración que se mueve rapido.",
-
-"Nivel 10 → Hablemos de Videojuegos con Jauregui",
-
-"Nivel 11 → Samurai legendario...",
-
-"Nivel 12 → Los dias se contaron desde el inicio..."
-
-];
-//TE AMO 
-const KEY = "E&A🔥2026";
-
-const encrypted = [
-
-"U2FsdGVkX1+X7fJxkK1C0F7n2KX6V1r7k6xXw6s3d8E=",
-
-"U2FsdGVkX1+Q2z0mYkZ7k1mQqTz8c3v6lP4b8n5x2sA=",
-
-"U2FsdGVkX1+Tq8mK2pX1aN7kF3dZ4v9bH6sL2m5n8cE=",
-
-"U2FsdGVkX1+Y7nR4vK2pF9dA3cX6m8sL1qT5bN0z9eQ=",
-
-"U2FsdGVkX1+F6mP3sD9kL2xT8vN4qZ1cY7rA5w0bH6E=",
-
-"U2FsdGVkX1+M2xK8dQ6vL1nT9pF3sZ5cR7aY4b0H2eQ=",
-
-"U2FsdGVkX1+Z9aT3nF6kP1qL8vD2sX5mR4cY7bH0eE=",
-
-"U2FsdGVkX1+K4mT8pD2sL1vF9nQ6xZ3cY5aR7b0H2eQ=",
-
-"U2FsdGVkX1+P3kL7nF2vD9sT6qX1mZ5cR4aY8bH0eE=",
-
-"U2FsdGVkX1+X1kF9nT3pL2vD6sQ8mZ5cR4aY7bH0eE=",
-
-"U2FsdGVkX1+L2vF8nT3pD9sQ6kX1mZ5cR4aY7bH0eE=",
-
-"U2FsdGVkX1+R5kF2nT3pL9vD6sQ8mZ1cY4a7bH0eE="
-
+"Nivel 8 → El segundo 17 de esta cancion me facino, gracias por enseñarme.",
+"Nivel 9 → El pilar mas Guapo tiene una respiración que se mueve rapido. ",
+"Nivel 10 →  Hablemos de Videojuegos con Jauregui",
+"Nivel 11 → Las peliculas de Samurai son de mis favoritas y en estas es un famoso forjador de armas sin comparacion.",
+"Nivel 12 → Los dias se contaron desde el inicio y hasta el final."
 ];
 
-
-function normalize(t){
-
-return t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]/g,"");
-
-}
-
-function decrypt(e){
-
-try{
-
-return CryptoJS.AES.decrypt(e,KEY).toString(CryptoJS.enc.Utf8);
-
-}catch{return "";}
-
-}
-
-function validate(input,level){
-
-let user=normalize(input);
-
-let real=normalize(decrypt(encrypted[level]));
-
-return user===real;
-
-}
-
-
-
-const term=document.getElementById("terminal");
-
-const input=document.getElementById("cmd");
-
-let level=localStorage.getItem("ea_level")?parseInt(localStorage.getItem("ea_level")):0;
-
-function print(t){
-
-term.innerHTML+=t+"\n";
-
-term.scrollTop=term.scrollHeight;
-
+function print(text){
+    term.innerHTML += text + "\n";
+    term.scrollTop = term.scrollHeight;
 }
 
 function progress(){
-
-document.getElementById("bar").style.width=(level/12*100)+"%";
-
+    document.getElementById("bar").style.width = (level/12*100)+"%";
 }
 
-
-input.addEventListener("keydown",function(e){
-
-if(e.key==="Enter"){
-
-let raw=input.value;
-
-let cmd=raw.toLowerCase();
-
-print("> "+raw);
-
-if(cmd==="help"){
-
-print("Comandos:");
-
-print("start → iniciar misión");
-
-print("unlock [respuesta]");
-
+function start(){
+    print("Inicializando sistema...");
+    print("Cargando memoria...");
+    print("Usuario detectado: EDUARDO\n");
+    print("Escribe 'help' para comenzar.\n");
 }
 
-else if(cmd==="start"){
+input.addEventListener("keydown", function(e){
+    if(e.key === "Enter"){
+        const cmd = input.value.toLowerCase();
+        print("> " + cmd);
 
-print(questions[level]);
+        if(cmd === "help"){
+            print("Comandos disponibles:");
+            print("start → iniciar misión");
+            print("unlock → responder nivel");
+        
+        }
 
-}
+        else if(cmd === "start"){
+            print("MISIÓN INICIADA...\n");
+            print(questions[level]);
+        }
 
-else if(cmd.startsWith("unlock")){
+        else if(cmd.startsWith("unlock")){
+            let user = cmd.replace("unlock ","");
 
-if(validate(raw.replace("unlock ",""),level)){
+            if(user.includes(answers[level])){
+                print("✔ ACCESS GRANTED\n");
+                level++;
+                progress();
 
-print("✔ ACCESS GRANTED\n");
+                if(level === 12){
+                    final();
+                } else {
+                    print("Nivel desbloqueado...\n");
+                    print(questions[level]);
+                }
 
-level++;
+            } else {
+                print("✖ ACCESS DENIED\n");
+            }
+        }
 
-localStorage.setItem("ea_level",level);
-
-progress();
-
-if(level===12){
-
-final();
-
-}else{
-
-print(questions[level]);
-
-}
-
-}else{
-
-print("✖ ACCESS DENIED\n");
-
-}
-
-}
-
-input.value="";
-
-}
-
+        input.value="";
+    }
 });
 
-
 function final(){
+    print("🔐 SISTEMA FINAL DESBLOQUEADO...");
+    print("Abriendo núcleo...\n");
 
-document.getElementById("finalScreen").style.display="flex";
-
-let text=[
-
-"No fue suerte...",
-
-"Fue destino...",
-
-"Fue decisión...",
-
-"Fue amor...",
-
-"",
-
-"Gracias por este año...",
-
-"Y por todos los que vienen...",
-
-"",
-
-"Te amo Eduardo ❤️"
-
-];
-
-let i=0;
-
-function show(){
-
-if(i<text.length){
-
-document.getElementById("finalText").innerHTML+=text[i]+"<br>";
-
-i++;
-
-setTimeout(show,1500);
-
+    setTimeout(()=>{
+        print("🎉 MISIÓN COMPLETADA 🎉\n");
+        print("Has completado el Nivel 1 de nuestra historia...\n");
+        print("Si llegaste hasta aquí...");
+        print("Es porque eres parte de mi universo.\n");
+        print("Te amo. — Alejandro ❤️");
+    },2000);
 }
 
-}
-
-show();
-
-}
-
-
-print("Sistema iniciado...");
-
-print("Usuario detectado: EDUARDO");
-
-print("Escribe 'help'\n");
-
-progress();
+start();
 
 </script>
 
 </body>
-
 </html>
